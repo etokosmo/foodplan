@@ -11,15 +11,33 @@ def get_upload_path(instance, filename):
 class FoodCategory(models.Model):
     title = models.CharField(
         verbose_name="Название",
-        max_length=200
+        max_length=200,
+        unique=True,
     )
 
     class Meta:
+        ordering = ('pk',)
         verbose_name = 'Категория Еды'
         verbose_name_plural = 'Категории Еды'
 
     def __str__(self):
         return self.title
+
+
+class Period(models.Model):
+    period = models.CharField(
+        verbose_name="Период приёма пищи",
+        max_length=100,
+        unique=True,
+    )
+
+    class Meta:
+        ordering = ('pk',)
+        verbose_name = 'Период приёма пищи'
+        verbose_name_plural = 'Период приёма пищи'
+
+    def __str__(self):
+        return self.period
 
 
 class Ingredient(models.Model):
@@ -37,16 +55,6 @@ class Ingredient(models.Model):
 
 
 class Recipe(models.Model):
-    BREAKFAST = 'BF'
-    LUNCH = 'LN'
-    DINNER = 'DN'
-    DESERT = 'DS'
-    STATUS_CHOICES = [
-        (BREAKFAST, 'Завтрак'),
-        (LUNCH, 'Обед'),
-        (DINNER, 'Ужин'),
-        (DESERT, 'Десерт'),
-    ]
     title = models.CharField(
         verbose_name="Название",
         max_length=200
@@ -62,13 +70,6 @@ class Recipe(models.Model):
         verbose_name="Категория еды",
         related_name='recipes',
         blank=True,
-    )
-    period = models.CharField(
-        verbose_name="Период приёма пищи",
-        max_length=2,
-        choices=STATUS_CHOICES,
-        default=DINNER,
-        db_index=True
     )
     recipe = HTMLField(
         verbose_name='Рецепт',
@@ -88,6 +89,12 @@ class Recipe(models.Model):
         verbose_name="Порций",
         blank=True,
         null=True,
+    )
+    period = models.ManyToManyField(
+        Period,
+        verbose_name="Период приема пищи",
+        related_name='recipes',
+        blank=True,
     )
 
     class Meta:
