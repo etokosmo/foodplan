@@ -1,24 +1,112 @@
 import json
-import requests
-import unidecode
-import unicodedata
+import time
 
+import requests
 from bs4 import BeautifulSoup
 
 
-def parse_ingredient_value(text):
+def parse_ingredient(text):
     splitted_string = text.strip().split()
-    if splitted_string[0].isnumeric():
-        amount = int(splitted_string[0])
+    first_word = splitted_string[0].replace(',', '.')
+    if is_float(first_word):
+        amount = float(first_word)
         weight_type = ' '.join(splitted_string[1:])
         return amount, weight_type
     return None, ' '.join(splitted_string)
 
 
-if __name__ == "__main__":
+def is_float(string):
+    try:
+        float(string)
+        return True
+    except ValueError:
+        return False
 
-    headers = {
-      'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+
+def parse_calories(text):
+    splitted_string = text.strip().split()
+    if splitted_string[0].isnumeric():
+        return int(splitted_string[0])
+
+
+def parse_tags(soup):
+    tags = [tag.attrs.get('value') for tag in soup.select('.recipe-tags__item')]
+    return tags
+
+
+def get_recipe_periods(tags):
+    tags_str = ' '.join(tags)
+    periods = []
+    if 'obed' in tags_str:
+        periods.append({"period": "Обед"})
+    if 'uzhin' in tags_str:
+        periods.append({"period": "Ужин"})
+    if 'zavtrak' in tags_str:
+        periods.append({"period": "Завтрак"})
+    return periods
+
+
+def get_food_category(tags):
+    tags_str = ' '.join(tags)
+    if 'vegatarianskoe' in tags_str:
+        return 'Вегетарианское'
+    elif 'keto' in tags_str:
+        return 'Кето'
+    elif 'nizkokalorijjnoe' in tags_str:
+        return 'Низкокалорийное'
+    else:
+        return 'Классическое'
+
+
+def is_new_year_tag_contained(tags):
+    tags_str = ' '.join(tags)
+    return 'novyjj-god' in tags_str
+
+
+def parse_recipe(url):
+    response = requests.get(url, headers=get_headers())
+    response.raise_for_status()
+    soup = BeautifulSoup(
+        response.text.replace('\r', '').replace('\n', '').replace('&#160;', ' ').replace('&#173;', ''),
+        'lxml'
+    )
+
+    recipe = {}
+    recipe_tags = parse_tags(soup)
+    recipe['title'] = soup.select_one('title').get_text()
+    recipe['period'] = get_recipe_periods(recipe_tags)
+    recipe['portions'] = int(soup.select_one('.recipe-portions__portion').get_text().strip())
+    calories_tag = soup.select_one('.recipe-nutritional-cell__sub-value')
+    recipe['calories'] = parse_calories(calories_tag.get_text()) if calories_tag else 0
+    recipe['image'] = soup.select_one('.recipe-main-header__image-source').get('src')
+    recipe['food_category'] = get_food_category(recipe_tags)
+    recipe['new_year_tag'] = is_new_year_tag_contained(recipe_tags)
+
+    steps = []
+    recipe_steps_soup = soup.select('.recipe-step__content-wrapper')
+    for step in recipe_steps_soup:
+        step_title = step.select_one('.recipe-step__title').get_text().strip()
+        step_description = step.select_one('.recipe-step__description').get_text().strip()
+        steps.append('<br>'.join([step_title, step_description]))
+
+    recipe['recipe'] = '<br>'.join(steps)
+
+    recipe['recipe_ingredient'] = []
+    ingredient_rows = soup.select('.recipe-ingredients-list-row')
+    for ingredient_row in ingredient_rows:
+        ingredient = {}
+        ingredient['ingredient'] = ingredient_row.select_one('.recipe-checkbox__label').get_text()
+        ingredient['amount'], ingredient['weight_type'] = parse_ingredient(
+            ingredient_row.select_one('.recipe-ingredients-list-row__value').get_text()
+        )
+        recipe['recipe_ingredient'].append(ingredient)
+    return recipe
+
+
+def get_headers():
+    return {
+      'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,'
+                'image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
       'Accept-Language': 'ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7,zh-CN;q=0.6,zh;q=0.5',
       'Cache-Control': 'max-age=0',
       'Connection': 'keep-alive',
@@ -35,35 +123,18 @@ if __name__ == "__main__":
       'sec-ch-ua-platform': 'Windows'
     }
 
+
+if __name__ == "__main__":
+
     with open('recipes_urls.json', 'r', encoding='utf-8') as file:
         recipe_urls = json.load(file)
 
-    recipes = []
     for recipe_url in recipe_urls:
-        response = requests.get(recipe_url, headers=headers)
-        response.raise_for_status()
-        soup = BeautifulSoup(
-            response.text.replace('\r', '').replace('\n', '').replace('&#160;', ' '),
-            'lxml'
-        )
+        try:
+            recipe = parse_recipe(recipe_url)
 
-        recipe = {}
-        recipe['title'] = soup.select_one('title').get_text()
-        recipe['portions'] = int(soup.select_one('.recipe-portions__portion').get_text().strip())
-
-        recipe['ingredients'] = []
-        ingredient_rows = soup.select('.recipe-ingredients-list-row')
-        for ingredient_row in ingredient_rows:
-            ingredient = {}
-            ingredient['title'] = ingredient_row.select_one('.recipe-checkbox__label').get_text()
-            ingredient['amount'], ingredient['weight_type'] = parse_ingredient_value(
-                ingredient_row.select_one('.recipe-ingredients-list-row__value').get_text()
-            )
-            recipe['ingredients'].append(ingredient)
-
-
-
-        print(recipe)
-
-
-        break
+            with open('./parse/{}.json'.format(recipe['title']), 'w', encoding='utf-8') as file:
+                json.dump(recipe, file, ensure_ascii=False)
+            print(recipe['title'])
+        except Exception:
+            time.sleep(3)
