@@ -28,7 +28,6 @@ class Period(models.Model):
     period = models.CharField(
         verbose_name="Период приёма пищи",
         max_length=100,
-        unique=True,
     )
 
     class Meta:

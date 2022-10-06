@@ -48,15 +48,25 @@ class RecipeSerializer(ModelSerializer):
         allow_empty=False,
         write_only=True
     )
-    food_category = PrimaryKeyRelatedField(
+    # food_category = PrimaryKeyRelatedField(
+    #     many=True,
+    #     required=True,
+    #     queryset=FoodCategory.objects.all()
+    # )
+    food_category = FoodCategorySerializer(
         many=True,
-        required=True,
-        queryset=FoodCategory.objects.all()
+        allow_empty=False,
+        write_only=True
     )
-    period = PrimaryKeyRelatedField(
+    # period = PrimaryKeyRelatedField(
+    #     many=True,
+    #     required=True,
+    #     queryset=Period.objects.all()
+    # )
+    period = PeriodSerializer(
         many=True,
-        required=True,
-        queryset=Period.objects.all()
+        allow_empty=False,
+        write_only=True
     )
     image = URLField()
 
@@ -95,18 +105,21 @@ def upload_photo_in_place(recipe: Recipe,
 def create_recipe(request):
     serializer = RecipeSerializer(data=request.data)
     serializer.is_valid(raise_exception=True)
-
+    food_category, created = FoodCategory.objects.get_or_create(
+        title=serializer.validated_data['food_category'][0].get("title"))
     recipe = Recipe.objects.create(
         title=serializer.validated_data['title'],
         recipe=serializer.validated_data['recipe'],
         new_year_tag=serializer.validated_data['new_year_tag'],
         calories=serializer.validated_data['calories'],
         portions=serializer.validated_data['portions'],
-        food_category=serializer.validated_data['food_category'][0],
+        food_category=food_category,
     )
     upload_photo_in_place(recipe, serializer.validated_data['image'])
     for recipe_period in serializer.validated_data['period']:
-        recipe.period.add(recipe_period)
+        period, created = Period.objects.get_or_create(
+            period=recipe_period.get("period"))
+        recipe.period.add(period)
     for ingredient in serializer.validated_data['recipe_ingredient']:
         ingredient_title = ingredient.get("ingredient")[0].get("title")
         ingredient_amount = ingredient.get("amount")
@@ -132,3 +145,21 @@ def get_recipe_by_id(request, recipe_id):
         'ingredients': ingredients,
     }
     return render(request, 'recipes/recipe.html', context=context)
+
+
+d = {
+    "title": "Соленая вода",
+    "period": [{"period": "Обед"}, {"period": "Ужин"}],
+    "image": "https://get.wallhere.com/photo/1920x1200-px-building-city-cityscape-Gold-Coast-1270905.jpg",
+    "recipe": "1 шаг.<br>Высыпать соль в воду.<br>2 шаг.<br>Размешать соль в воде",
+    "new_year_tag": "False",
+    "calories": 1,
+    "portions": 2,
+    "food_category": [{"title": "Classic"}],
+    "recipe_ingredient": [
+        {"ingredient": [{"title": "Water"}],
+         "amount": 10, "weight_type": "л"},
+        {"ingredient": [{"title": "Соль"}],
+         "amount": 5, "weight_type": "ст.ложек"}
+    ]
+}
