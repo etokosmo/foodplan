@@ -6,31 +6,17 @@ from django.core.files.base import ContentFile
 from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework.serializers import ModelSerializer, URLField
+from rest_framework.serializers import ModelSerializer, URLField, CharField
 
 from .models import FoodCategory, Recipe, Ingredient, RecipeIngredient, Period
 
 
-class IngredientSerializer(ModelSerializer):
-    class Meta:
-        model = Ingredient
-        fields = ['title']
-
-
 class RecipeIngredientSerializer(ModelSerializer):
-    ingredient = IngredientSerializer(
-        write_only=True
-    )
+    ingredient = CharField()
 
     class Meta:
         model = RecipeIngredient
         fields = ['ingredient', 'amount', 'weight_type']
-
-
-class FoodCategorySerializer(ModelSerializer):
-    class Meta:
-        model = FoodCategory
-        fields = ['title']
 
 
 class PeriodSerializer(ModelSerializer):
@@ -45,9 +31,7 @@ class RecipeSerializer(ModelSerializer):
         allow_empty=False,
         write_only=True
     )
-    food_category = FoodCategorySerializer(
-        write_only=True
-    )
+    food_category = CharField()
     period = PeriodSerializer(
         many=True,
         allow_empty=False,
@@ -91,7 +75,7 @@ def create_recipe(request):
     serializer = RecipeSerializer(data=request.data)
     serializer.is_valid(raise_exception=True)
     food_category, created = FoodCategory.objects.get_or_create(
-        title=serializer.validated_data['food_category'].get("title"))
+        title=serializer.validated_data['food_category'])
     recipe = Recipe.objects.create(
         title=serializer.validated_data['title'],
         recipe=serializer.validated_data['recipe'],
@@ -106,7 +90,7 @@ def create_recipe(request):
             period=recipe_period.get("period"))
         recipe.period.add(period)
     for ingredient in serializer.validated_data['recipe_ingredient']:
-        ingredient_title = ingredient.get("ingredient").get("title")
+        ingredient_title = ingredient.get("ingredient")
         ingredient_amount = ingredient.get("amount")
         ingredient_weight_type = ingredient.get("weight_type")
         ingredient_obj, created = Ingredient.objects.get_or_create(
