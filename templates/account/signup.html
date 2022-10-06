@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -7,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
     <title>Foodplan 2021 - Меню на неделю FOODPLAN</title>
 </head>
 
@@ -16,7 +17,7 @@
         <nav class="navbar navbar-expand-md navbar-light fixed-top navbar__opacity">
             <div class="container">
                 <a class="navbar-brand" href="#">
-                    <img src="img/logo.8d8f24edbb5f.svg" height="55" width="189" alt="">
+                    <img src="{% static 'logo.8d8f24edbb5f.svg' %}" height="55" width="189" alt="">
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse1"
                     aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -48,30 +49,31 @@
                     <h2 class="text-center"><strong>Авторизация</strong></h2>
                 </div>
                 <div class="card px-5 py-3 d-flex align-items-center foodplan__shadow">
-                    <form>
+                    <form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
+                        {% csrf_token %}
                         <h1 class="mb-4 text-center"><strong>Регистрация</strong></h1>
                         <div class="mb-3">
-                            <label for="exampleInputEmail1" class="form-label">Имя</label>
-                            <input type="text" class="form-control" id="name">
+                            <label for="id_username" class="form-label">Имя пользователя:</label>
+                            <input type="text" class="form-control" name="username" placeholder="Имя пользователя" autocomplete="username" minlength="1" maxlength="150" required id="id_username">
                         </div>
                         <div class="mb-3">
-                            <label for="exampleInputEmail1" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="email" aria-describedby="emailHelp">
+                            <label for="id_email" class="form-label">E-mail:</label>
+                            <input type="email" class="form-control" name="email" placeholder="E-mail адрес" autocomplete="email" required id="id_email">                        
                         </div>
                         <div class="mb-3">
-                            <label for="exampleInputPassword1" class="form-label">Пароль</label>
-                            <input type="password" class="form-control" id="password">
+                            <label for="id_password1" class="form-label">Пароль:</label>
+                            <input type="password" class="form-control" name="password1" placeholder="Пароль" autocomplete="new-password" required id="id_password1">
                         </div>
                         <div class="mb-3">
-                            <label for="exampleInputPassword1" class="form-label">Подтверждение пароля</label>
-                            <input type="password" class="form-control" id="PasswordConfirm">
+                            <label for="id_password2" class="form-label">Пароль (еще раз):</label>
+                            <input type="password" class="form-control" name="password2" placeholder="Пароль (еще раз)" autocomplete="new-password" required id="id_password2">
                         </div>
                         <div class="row mb-3">
                             <div class="col-12 col-sm-6 mt-3">
                                 <button type="submit" class="btn  shadow-nonew-100 btn-outline-success foodplan_green foodplan__border_green">Регистрация</button>
                             </div>
                             <div class="col-12 col-sm-6 mt-3 d-flex justify-content-center align-items-center">
-                                <small>Уже есть аккаунт? <a href="#" class="link-dark foodplan_green">Войти</a></small>
+                                <small>Уже есть аккаунт? <a href="{% url 'account_login' %}" class="link-dark foodplan_green">Войти</a></small>
                             </div>
                         </div>
                     </form>
@@ -83,7 +85,7 @@
         <nav class="navbar navbar-expand-md navbar-light mt-5">
             <div class="container p-2">
                 <a class="navbar-brand" href="#">
-                    <img src="img/logo.8d8f24edbb5f.svg" height="55" width="189" alt="">
+                    <img src="{% static 'logo.8d8f24edbb5f.svg' %}" height="55" width="189" alt="">
                 </a>
                 <div class="footer__sideBtns d-flex">
                     <a href="#">
