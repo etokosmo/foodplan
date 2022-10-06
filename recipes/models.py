@@ -12,7 +12,6 @@ class FoodCategory(models.Model):
     title = models.CharField(
         verbose_name="Название",
         max_length=200,
-        unique=True,
     )
 
     class Meta:
