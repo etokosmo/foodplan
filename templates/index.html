@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,7 +15,7 @@
         <nav class="navbar navbar-light fixed-top navbar__opacity">
             <div class="container">
                 <a class="navbar-brand" href="#">
-                    <img src="img/logo.8d8f24edbb5f.svg" height="55" width="189" alt="">
+                    <img src="{% static 'logo.8d8f24edbb5f.svg' %}" height="55" width="189" alt="">
                 </a>
                 {% if user.is_authenticated %}
                 <a class="btn shadow-none btn-outline-success foodplan_green foodplan__border_green" href="{% url 'account_logout' %}">Выйти</a>
@@ -218,17 +219,17 @@
                                 <h5>Диплом повара Le Cordon Bleu</h5>
                                 <h5>London</h5>
                             </div>
-                            <img src="img/union-right.svg" alt="" class="logo1">
+                            <img src="{% static 'union-right.svg' %}" alt="" class="logo1">
                         </div>
                     </div>
                     <div class="col-12 col-sm-6 col-lg-4">
                         <div class="d-flex flex-row justify-content-between m-1">
-                            <img src="img/union-left.svg" alt="" class="logo1">
+                            <img src="{% static 'img/union-left.svg' %}" alt="" class="logo1">
                             <div class="d-flex flex-column align-items-center text-center justify-content-center">
                                 <h5>При поддержке Austrian Angel Investors</h5>
                                 <h5>Vienna</h5>
                             </div>
-                            <img src="img/union-right.svg" alt="" class="logo1">
+                            <img src="{% static 'union-right.svg' %}" alt="" class="logo1">
                         </div>
                     </div>
                 </div>
@@ -238,7 +239,7 @@
     <footer class="footer py-4 mt-5" style="border-top: 1px solid lightgray;">
         <div class="container d-flex flex-row justify-content-between mb-2">
             <a href="https://vk.com/devmanorg">
-                <img src="img/vk.png" height="40" width="auto" alt="">
+                <img src="{% static 'img/vk.png' %}" height="40" width="auto" alt="">
             </a>
             <div>
                 <a href="#" class="link-dark mx-1" style="text-decoration: none;"><b>Виды меню</b></a>
