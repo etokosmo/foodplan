@@ -79,7 +79,7 @@ def parse_recipe(url):
     recipe['portions'] = int(soup.select_one('.recipe-portions__portion').get_text().strip())
     calories_tag = soup.select_one('.recipe-nutritional-cell__sub-value')
     recipe['calories'] = parse_calories(calories_tag.get_text()) if calories_tag else 0
-    recipe['image'] = soup.select_one('.recipe-main-header__image-source').get('src')
+    recipe['image'] = soup.select_one('.recipe-main-header__image-source').get('src').split('?')[0]
     recipe['food_category'] = get_food_category(recipe_tags)
     recipe['new_year_tag'] = is_new_year_tag_contained(recipe_tags)
 
@@ -152,5 +152,5 @@ if __name__ == "__main__":
             #     json.dump(recipe, file, ensure_ascii=False)
             # print(recipe['title'])
         except Exception as err:
-            time.sleep(3)
+            time.sleep(1)
 
