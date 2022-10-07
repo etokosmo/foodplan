@@ -1,5 +1,7 @@
 from django import forms
+from django.contrib.auth.models import AnonymousUser
 from django.shortcuts import render
+from django.utils.functional import SimpleLazyObject
 from .models import Promocode, Order
 
 
@@ -84,6 +86,8 @@ class FoodCategoryForm(forms.Form):
 
 
 def create_order(request):
+    if request.user.is_anonymous:
+        return render(request, 'account/login.html')
     logged_user = request.user
     order, created = Order.objects.get_or_create(user=logged_user)
 
