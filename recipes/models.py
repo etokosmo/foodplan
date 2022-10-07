@@ -121,7 +121,7 @@ class RecipeIngredient(models.Model):
     amount = models.DecimalField(
         verbose_name="Количество",
         max_digits=10,
-        decimal_places=1,
+        decimal_places=2,
         blank=True,
         null=True,
     )
