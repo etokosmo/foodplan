@@ -3,6 +3,7 @@ import time
 
 import requests
 from bs4 import BeautifulSoup
+from environs import Env
 
 
 def parse_ingredient(text):
@@ -87,7 +88,7 @@ def parse_recipe(url):
     for step in recipe_steps_soup:
         step_title = step.select_one('.recipe-step__title').get_text().strip()
         step_description = step.select_one('.recipe-step__description').get_text().strip()
-        steps.append('<br>'.join([step_title, step_description]))
+        steps.append('<br>'.join(['<b>{}</b>'.format(step_title), step_description]))
 
     recipe['recipe'] = '<br>'.join(steps)
 
@@ -124,7 +125,20 @@ def get_headers():
     }
 
 
+def send_recipe(url, recipe):
+    response = requests.post(
+        url,
+        headers={'Content-Type': 'application/json'},
+        json=recipe,
+    )
+    response.raise_for_status()
+
+
 if __name__ == "__main__":
+    env = Env()
+    env.read_env()
+    django_api = env.str('DRF_CREATE_URL')
+
 
     with open('recipes_urls.json', 'r', encoding='utf-8') as file:
         recipe_urls = json.load(file)
@@ -132,9 +146,11 @@ if __name__ == "__main__":
     for recipe_url in recipe_urls:
         try:
             recipe = parse_recipe(recipe_url)
-
-            with open('./parse/{}.json'.format(recipe['title']), 'w', encoding='utf-8') as file:
-                json.dump(recipe, file, ensure_ascii=False)
+            send_recipe(django_api, recipe)
             print(recipe['title'])
-        except Exception:
+            # with open('./parse/{}.json'.format(recipe['title']), 'w', encoding='utf-8') as file:
+            #     json.dump(recipe, file, ensure_ascii=False)
+            # print(recipe['title'])
+        except Exception as err:
             time.sleep(3)
+
