@@ -62,8 +62,11 @@ def get_filename(url: str) -> str:
 def upload_photo_in_place(recipe: Recipe,
                           recipe_image_url: str) -> None:
     filename = get_filename(recipe_image_url)
-
-    response = requests.get(recipe_image_url)
+    headers ={
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
+    'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36',
+    }
+    response = requests.get(recipe_image_url, headers=headers)
     response.raise_for_status()
     uploaded_photo = ContentFile(response.content, name=filename)
     recipe.image = uploaded_photo
