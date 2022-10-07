@@ -25,43 +25,50 @@
     <main style="margin-top: calc(2rem + 85px);">
         <section>
             <div class="container">
+                <form method="POST">
+                    {% csrf_token %}
                 <h1><strong class="foodplan_green">1 шаг </strong>до первого меню</h1>
                 <h5 class="text-secondary mb-3">Вам будет доступно 4 типа меню: Классическое, Низкоуглеводное, Вегетарианское и Кето.</h5>
                 <div class="row mb-5">
 
                   <div class="col-6 col-md-3">
 
-                        <label for="classic" class="position-relative" style="cursor: pointer;">
+                        <label for="id_food_category_0" class="position-relative" style="cursor: pointer;">
                             <img src="{% static 'order/img/menu_classical.png' %}" alt="" class="w-100">
-                            <input form="order" type="radio" name="foodtype" id="classic" value="classic" class="foodplan_selected d-none">
+                            <input type="radio" name="food_category" value="100" class="foodplan_selected d-none" onchange="submit();" id="id_food_category_0" {% if food_form_cost == 100 %}required="" checked=""{% endif %}>
+<!--                            <input form="order" type="radio" name="foodtype" id="classic" value="classic" class="foodplan_selected d-none">-->
                             <div class="img_selected" id="img1"></div>
                         </label>
                     </div>
                     <div class="col-6 col-md-3">
                         
-                        <label for="low" class="position-relative" style="cursor: pointer;">
+                        <label for="id_food_category_1" class="position-relative" style="cursor: pointer;">
                             <img src="{% static 'order/img/menu_nizkougl.png' %}" alt="" class="w-100">
-                            <input form="order" type="radio" name="foodtype" id="low" value="low" class="foodplan_selected d-none">
+                            <input type="radio" name="food_category" value="200" class="foodplan_selected d-none" onchange="submit();" id="id_food_category_1" {% if food_form_cost == 200 %}required="" checked=""{% endif %}>
+<!--                            <input form="order" type="radio" name="foodtype" id="low" value="low" class="foodplan_selected d-none">-->
                             <div class="img_selected" id="img2"></div>
                         </label>
                     </div>
                     <div class="col-6 col-md-3">
-                        
-                        <label for="veg" class="position-relative" style="cursor: pointer;">
+
+                        <label for="id_food_category_2" class="position-relative" style="cursor: pointer;">
                             <img src="{% static 'order/img/menu_veg.png' %}" alt="" class="w-100">
-                            <input form="order" type="radio" name="foodtype" id="veg" value="veg" class="foodplan_selected d-none">
+                            <input type="radio" name="food_category" value="300" class="foodplan_selected d-none" onchange="submit();" id="id_food_category_2" {% if food_form_cost == 300 %}required="" checked=""{% endif %}>
                             <div class="img_selected" id="img3"></div>
                         </label>
                     </div>
                     <div class="col-6 col-md-3">
                         
-                        <label for="keto" class="position-relative" style="cursor: pointer;">
+                        <label for="id_food_category_3" class="position-relative" style="cursor: pointer;">
                             <img src="{% static 'order/img/menu_keto.png' %}" alt="" class="w-100">
-                            <input form="order" type="radio" name="foodtype" id="keto" value="keto" class="foodplan_selected d-none">
+                            <input type="radio" name="food_category" value="400" class="foodplan_selected d-none" onchange="submit();" id="id_food_category_3" {% if food_form_cost == 400 %}required="" checked=""{% endif %}>
+
+<!--                            <input form="order" type="radio" name="foodtype" id="keto" value="keto" class="foodplan_selected d-none">-->
                             <div class="img_selected" id="img4"></div>
                         </label>
                     </div>
-                </div>
+
+                </div></form>
                 <h2><strong>Выберите подходящий тариф</strong></h2>
                 <form id="order" method="POST">
                     {% csrf_token %}
@@ -70,37 +77,79 @@
                         <tr>
                             <th scope="row" class="text-start">Срок</th>
                             <td>
-                                {{ form.time }}
+                                <select name="time" class="form-select" onchange="submit();" id="id_time">
+                                  <option value="1" {% if time == '1' %}selected="selected"{% endif %}>1 месяц</option>
+
+                                  <option value="3" {% if time == '3' %}selected="selected"{% endif %}>3 месяца</option>
+
+                                  <option value="6" {% if time == '6' %}selected="selected"{% endif %}>6 месяцев</option>
+
+                                  <option value="12" {% if time == '12' %}selected="selected"{% endif %}>12 месяцев</option>
+
+                                </select>
                             </td>
                         </tr>
                         <tr>
                             <th scope="row" class="text-start">Завтраки</th>
                             <td>
-                                {{ form.breakfast }}
+                                <select name="breakfast" class="form-select" onchange="submit();" id="id_breakfast">
+                                  <option value="50" {% if breakfast %}selected="selected"{% endif %}>✔</option>
+
+                                  <option value="0" {% if not breakfast %}selected="selected"{% endif %}>✘</option>
+
+                                </select>
                             </td>
                         </tr>
                         <tr>
                             <th scope="row" class="text-start">Обеды</th>
                             <td>
-                                {{ form.lunch }}
+                                <select name="lunch" class="form-select" onchange="submit();" id="id_lunch">
+                                  <option value="50" {% if lunch %}selected="selected"{% endif %}>✔</option>
+
+                                  <option value="0" {% if not lunch %}selected="selected"{% endif %}>✘</option>
+
+                                </select>
                             </td>
                         </tr>
                         <tr>
                             <th scope="row" class="text-start">Ужины</th>
                             <td>
-                                {{ form.dinner }}
+                                <select name="dinner" class="form-select" onchange="submit();" id="id_dinner">
+                                  <option value="50" {% if dinner %}selected="selected"{% endif %}>✔</option>
+
+                                  <option value="0" {% if not dinner %}selected="selected"{% endif %}>✘</option>
+
+                                </select>
                             </td>
                         </tr>
                         <tr>
                             <th scope="row" class="text-start">Десерты</th>
                             <td>
-                                {{ form.dessert }}
+                                <select name="dessert" class="form-select" onchange="submit();" id="id_dessert">
+                                  <option value="50" {% if dessert %}selected="selected"{% endif %}>✔</option>
+
+                                  <option value="0" {% if not dessert %}selected="selected"{% endif %}>✘</option>
+
+                                </select>
                             </td>
                         </tr>
                         <tr>
                             <th scope="row" class="text-start">Кол-во персон</th>
                             <td>
-                                {{ form.person_amount }}
+                                <select name="amount_person" class="form-select" onchange="submit();" id="id_amount_person">
+                                  <option value="1" {% if amount_person == '1' %}selected="selected"{% endif %}>1</option>
+
+                                  <option value="2" {% if amount_person == '2' %}selected="selected"{% endif %}>2</option>
+
+                                  <option value="3" {% if amount_person == '3' %}selected="selected"{% endif %}>3</option>
+
+                                  <option value="4" {% if amount_person == '4' %}selected="selected"{% endif %}>4</option>
+
+                                  <option value="5" {% if amount_person == '5' %}selected="selected"{% endif %}>5</option>
+
+                                  <option value="6" {% if amount_person == '6' %}selected="selected"{% endif %}>6</option>
+
+                                </select>
                             </td>
                         </tr>
                         <tr>
@@ -149,11 +198,18 @@
                 <button type="submit" id="TableSubmit" class="d-none"></button>
                 </form>
 
-                <form class="card d-flex flex-row align-items-baseline mb-5 p-3 foodplan__bg_grey">
+                <form class="card d-flex flex-row align-items-baseline mb-5 p-3 foodplan__bg_grey" method="POST">
+                    {% csrf_token %}
                     <label for="exampleInputPassword1" class="form-label me-2">Промокод</label>
-                    <input type="password" class="form-control me-2" id="password">
+                    {{ promo_form.promocode }}
+<!--                    <input type="password" class="form-control me-2" id="password">-->
                     <button type="submit" class="btn shadow-none btn-outline-success foodplan_green foodplan__border_green">Применить</button>
                 </form>
+                {% if promocode %}
+                    {% if not correct_promocode %}
+                        Промокод неверный
+                    {% endif %}
+                {% endif %}
                 <div class="d-flex justify-content-center my-5">
                     <button form="order" type="submit" class="btn shadow-none btn-outline-success foodplan_green foodplan__border_green w-50">Оплатить</button>
                 </div>

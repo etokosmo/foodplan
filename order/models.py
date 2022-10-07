@@ -1,32 +1,41 @@
 from django.db import models
-
+from django.contrib.auth.models import User
 from recipes.models import FoodCategory
 
 
 class Order(models.Model):
-    ONEMONTH = 'OM'
-    THREEMONTH = 'TM'
-    SIXMONTH = 'SM'
-    TWELVEMONTH = 'WM'
-    STATUS_CHOICES = [
+    ONEMONTH = 1
+    THREEMONTH = 3
+    SIXMONTH = 6
+    TWELVEMONTH = 12
+    TIME_CHOICES = [
         (ONEMONTH, '1 месяц'),
         (THREEMONTH, '3 месяца'),
         (SIXMONTH, '6 месяцев'),
         (TWELVEMONTH, '12 месяцев'),
     ]
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        verbose_name="Пользователь",
+        related_name="orders",
+        blank=True,
+        null=True
+    )
     category = models.ForeignKey(
         FoodCategory,
         on_delete=models.SET_NULL,
         null=True,
         verbose_name="Категория",
-        related_name="orders"
+        related_name="orders",
+        blank=True,
     )
     time = models.CharField(
         verbose_name="Срок заказа",
         max_length=2,
-        choices=STATUS_CHOICES,
+        choices=TIME_CHOICES,
         default=ONEMONTH,
-        db_index=True
+        db_index=True,
     )
     breakfast = models.BooleanField(
         verbose_name="Завтраки",
@@ -48,3 +57,33 @@ class Order(models.Model):
         verbose_name="Количество персон",
         default=1,
     )
+    food_form_cost = models.PositiveIntegerField(
+        verbose_name="Цена сета для юзера",
+        default=100,
+    )
+    result = models.PositiveIntegerField(
+        verbose_name="Итоговая цена",
+        default=200,
+    )
+
+
+class Promocode(models.Model):
+    title = models.CharField(
+        verbose_name="Название",
+        max_length=200,
+    )
+    promocode = models.CharField(
+        verbose_name="Промокод",
+        max_length=200,
+        unique=True
+    )
+    discount = models.PositiveIntegerField(
+        verbose_name="Скидка в процентах",
+    )
+
+    class Meta:
+        verbose_name = 'Промокод'
+        verbose_name_plural = 'Промокоды'
+
+    def __str__(self):
+        return self.title
