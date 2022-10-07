@@ -22,6 +22,7 @@ from accounts.views import HomePageView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('recipes/', include('recipes.urls')),
+    path('order/', include('order.urls')),
     path('api-auth/', include('rest_framework.urls')),
     path('accounts/', include('allauth.urls')),
     path('', HomePageView.as_view(), name='home')

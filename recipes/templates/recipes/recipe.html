@@ -54,12 +54,14 @@
                                 <small class="link-secondary">Ингредиенты:</small>
                                 <ul class="list-group list-group-flush">
                                     {% for ingredient in ingredients %}
-                                    <li class="list-group-item disabled"><small>{{ ingredient.ingredient }} ({{ ingredient.amount }} {{ ingredient.weight_type }}.)</small></li>
+                                    <li class="list-group-item disabled"><small>
+                                        {{ ingredient.ingredient }}
+                                        ({% if ingredient.amount %}{{ ingredient.amount }}{% endif %}
+                                        {{ ingredient.weight_type }})</small></li>
                                     {% endfor %}
                                 </ul>
                                 <small class="link-secondary">Общая калорийность: {{ recipe.calories }} ккал</small>
                             </div>
-{{MEDIA_URL}}asd
                         </div>
                     </div>
                 </div>
