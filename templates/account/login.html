@@ -47,6 +47,9 @@
                     <h2 class="text-center"><strong>Авторизация</strong></h2>
                 </div>
                 <div class="card px-5 py-3 d-flex align-items-center foodplan__shadow">
+                    {% if form.errors %}
+                    <p>Пользователь с такими реквизитами не найден. Попробуйте ещё раз</p>
+                    {% endif %}
                     <form method="post" action="{% url 'account_login' %}">
                         {% csrf_token %}                 
                         <h1 class="mb-4 text-center"><strong>Вход</strong></h1>

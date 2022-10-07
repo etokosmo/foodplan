@@ -138,7 +138,7 @@ LOGOUT_REDIRECT_URL = 'home'
 
 # django-allauth config
 SITE_ID = 1
-LOGIN_REDIRECT_URL = 'home'
+LOGIN_REDIRECT_URL = 'lk'
 ACCOUNT_LOGOUT_REDIRECT = 'home'
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
