@@ -62,9 +62,9 @@ def get_filename(url: str) -> str:
 def upload_photo_in_place(recipe: Recipe,
                           recipe_image_url: str) -> None:
     filename = get_filename(recipe_image_url)
-    headers ={
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
-    'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36',
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
+        'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36',
     }
     response = requests.get(recipe_image_url, headers=headers)
     response.raise_for_status()
@@ -79,13 +79,15 @@ def create_recipe(request):
     serializer.is_valid(raise_exception=True)
     food_category, created = FoodCategory.objects.get_or_create(
         title=serializer.validated_data['food_category'])
-    recipe = Recipe.objects.create(
+    recipe, _ = Recipe.objects.get_or_create(
         title=serializer.validated_data['title'],
-        recipe=serializer.validated_data['recipe'],
-        new_year_tag=serializer.validated_data['new_year_tag'],
-        calories=serializer.validated_data['calories'],
-        portions=serializer.validated_data['portions'],
-        food_category=food_category,
+        defaults={
+            'recipe': serializer.validated_data['recipe'],
+            'new_year_tag': serializer.validated_data['new_year_tag'],
+            'calories': serializer.validated_data['calories'],
+            'portions': serializer.validated_data['portions'],
+            'food_category': food_category,
+            }
     )
     upload_photo_in_place(recipe, serializer.validated_data['image'])
     for recipe_period in serializer.validated_data['period']:
@@ -99,6 +101,7 @@ def create_recipe(request):
         ingredient_obj, created = Ingredient.objects.get_or_create(
             title=ingredient_title
         )
+        RecipeIngredient.objects.filter(recipe=recipe).delete()
         recipe_ingredient = RecipeIngredient.objects.create(
             recipe=recipe,
             ingredient=ingredient_obj,
