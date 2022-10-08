@@ -89,7 +89,7 @@ def create_order(request):
         return render(request, 'account/login.html')
     logged_user = request.user
     order, created = Order.objects.get_or_create(user=logged_user)
-
+    print(order.time)
     user_promocode = ""
     correct_promocode = False
 

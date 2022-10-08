@@ -35,12 +35,9 @@ class Order(models.Model):
         blank=True,
         default=get_default_category
     )
-    time = models.CharField(
-        verbose_name="Срок заказа",
-        max_length=2,
-        choices=TIME_CHOICES,
-        default=ONEMONTH,
-        db_index=True,
+    time = models.PositiveIntegerField(
+        verbose_name="Срок заказа в месяцах",
+        default=1,
     )
     breakfast = models.BooleanField(
         verbose_name="Завтраки",
