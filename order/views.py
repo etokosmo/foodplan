@@ -1,8 +1,7 @@
 from django import forms
-from django.contrib.auth.models import AnonymousUser
 from django.shortcuts import render
-from django.utils.functional import SimpleLazyObject
 from .models import Promocode, Order
+from recipes.models import FoodCategory
 
 
 class OrderForm(forms.Form):
@@ -99,6 +98,14 @@ def create_order(request):
     food_form = FoodCategoryForm(request.POST or None)
     if food_form.is_valid():
         food_form_cost = int(food_form.cleaned_data.get("food_category"))
+        if food_form_cost == 100:
+            order.category = FoodCategory.objects.get(title='Классическое')
+        if food_form_cost == 200:
+            order.category = FoodCategory.objects.get(title='Низкоуглеводное')
+        if food_form_cost == 300:
+            order.category = FoodCategory.objects.get(title='Вегетарианское')
+        if food_form_cost == 400:
+            order.category = FoodCategory.objects.get(title='Кето')
         order.food_form_cost = food_form_cost
         order.save()
     if form.is_valid():

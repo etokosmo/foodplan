@@ -3,6 +3,10 @@ from django.contrib.auth.models import User
 from recipes.models import FoodCategory
 
 
+def get_default_category():
+    return FoodCategory.objects.get(title='Классическое')
+
+
 class Order(models.Model):
     ONEMONTH = 1
     THREEMONTH = 3
@@ -29,6 +33,7 @@ class Order(models.Model):
         verbose_name="Категория",
         related_name="orders",
         blank=True,
+        default=get_default_category
     )
     time = models.CharField(
         verbose_name="Срок заказа",
@@ -65,6 +70,17 @@ class Order(models.Model):
         verbose_name="Итоговая цена",
         default=200,
     )
+    is_paid = models.BooleanField(
+        verbose_name="Оплачен",
+        default=False,
+    )
+
+    class Meta:
+        verbose_name = 'Заказ'
+        verbose_name_plural = 'Заказы'
+
+    def __str__(self):
+        return f"{self.user} - {self.category}"
 
 
 class Promocode(models.Model):
