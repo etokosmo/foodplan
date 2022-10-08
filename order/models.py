@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from recipes.models import FoodCategory
+from recipes.models import FoodCategory, Recipe
 
 
 def get_default_category():
@@ -79,6 +79,15 @@ class Order(models.Model):
     def __str__(self):
         return f"{self.user} - {self.category}"
 
+    def get_day_menu(self, date):
+        day_menu, created = DayMenu.objects.get_or_create(
+            order=self,
+            date=date
+        )
+        if created:
+            day_menu.fill_recipes()
+        return day_menu
+
 
 class Promocode(models.Model):
     title = models.CharField(
@@ -100,3 +109,73 @@ class Promocode(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class DayMenu(models.Model):
+    order = models.ForeignKey(
+        Order,
+        on_delete=models.CASCADE,
+        verbose_name='Подписка',
+        related_name='day_menus'
+    )
+    date = models.DateField(
+        verbose_name='Дата',
+    )
+    breakfast = models.ForeignKey(
+        Recipe,
+        on_delete=models.CASCADE,
+        verbose_name='Завтрак',
+        related_name='day_menus_breakfast',
+        blank=True,
+        null=True
+    )
+    dinner = models.ForeignKey(
+        Recipe,
+        on_delete=models.CASCADE,
+        verbose_name='Ужин',
+        related_name='day_menus_dinner',
+        blank=True,
+        null=True
+    )
+    lunch = models.ForeignKey(
+        Recipe,
+        on_delete=models.CASCADE,
+        verbose_name='Обед',
+        related_name='day_menus_lunch',
+        blank=True,
+        null=True
+    )
+    dessert = models.ForeignKey(
+        Recipe,
+        on_delete=models.CASCADE,
+        verbose_name='Десерт',
+        related_name='day_menus_dessert',
+        blank=True,
+        null=True
+    )
+
+    class Meta:
+        verbose_name = 'Меню на день'
+
+    def fill_recipes(self):
+        recipes = Recipe.objects.filter(
+            food_category=self.order.category,
+            portions__gte=self.order.amount_person,
+        ).order_by('?')
+        if self.order.breakfast:
+            self.breakfast = recipes.filter(
+                period__period='Завтрак'
+            ).first()
+        if self.order.lunch:
+            self.lunch = recipes.filter(
+                period__period='Обед'
+            ).first()
+        if self.order.dinner:
+            self.dinner = recipes.filter(
+                period__period='Ужин'
+            ).first()
+        if self.order.dessert:
+            self.dessert = recipes.filter(
+                period__period='Десерт'
+            ).first()
+        self.save()
