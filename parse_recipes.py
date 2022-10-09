@@ -44,6 +44,8 @@ def get_recipe_periods(tags):
         periods.append({"period": "Ужин"})
     if 'zavtrak' in tags_str:
         periods.append({"period": "Завтрак"})
+    if 'desert' in tags_str:
+        periods.append({"period": "Десерт"})
     return periods
 
 
