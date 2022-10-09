@@ -15,6 +15,8 @@ from pathlib import Path
 
 from environs import Env
 
+from django.contrib.messages import constants as messages
+
 env = Env()
 env.read_env()
 
@@ -139,7 +141,7 @@ LOGOUT_REDIRECT_URL = 'home'
 
 # django-allauth config
 SITE_ID = 1
-LOGIN_REDIRECT_URL = 'lk'
+LOGIN_REDIRECT_URL = 'profile'
 ACCOUNT_LOGOUT_REDIRECT = 'home'
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
@@ -152,3 +154,10 @@ ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_LOGOUT_ON_GET = True
+MESSAGE_TAGS = {
+        messages.DEBUG: 'alert-secondary',
+        messages.INFO: 'alert-info',
+        messages.SUCCESS: 'alert-success',
+        messages.WARNING: 'alert-warning',
+        messages.ERROR: 'alert-danger',
+ }
