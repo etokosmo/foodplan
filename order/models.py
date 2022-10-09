@@ -155,7 +155,8 @@ class DayMenu(models.Model):
     )
 
     class Meta:
-        verbose_name = 'Меню на день'
+        verbose_name = 'Меню на день',
+        verbose_name_plural = 'Меню на день'
 
     def fill_recipes(self):
         recipes = Recipe.objects.filter(
