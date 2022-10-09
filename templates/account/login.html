@@ -45,11 +45,18 @@
                         </svg>
                     </a>
                     <h2 class="text-center"><strong>Авторизация</strong></h2>
+                    {% if messages %}
+                    {% for message in messages %}
+                    <div id="message">
+                    <div id="inner-message" class="alert alert-warning alert-dismissible fade show" role="alert">
+                        {{message}}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                      </div>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
                 </div>
                 <div class="card px-5 py-3 d-flex align-items-center foodplan__shadow">
-                    {% if form.errors %}
-                    <p>Пользователь с такими реквизитами не найден. Попробуйте ещё раз</p>
-                    {% endif %}
                     <form method="post" action="{% url 'account_login' %}">
                         {% csrf_token %}                 
                         <h1 class="mb-4 text-center"><strong>Вход</strong></h1>
