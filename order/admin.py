@@ -16,5 +16,4 @@ class OrderAdmin(admin.ModelAdmin):
 
 @admin.register(DayMenu)
 class DayMenuAdmin(admin.ModelAdmin):
-    list_display = ["order", "date", "breakfast", "lunch", "dinner"]
-    fields = ["order", "date", "breakfast", "lunch", "dinner"]
+    list_display = ["order", "date", "breakfast", "lunch", "dinner", "dessert"]
