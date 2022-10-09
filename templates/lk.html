@@ -57,18 +57,20 @@
                             </ul>
                             <div class="tab-content mt-2">
                                 <div class="tab-pane fade show active" id="data">
-                                    <form action="">
+                                    <form method="post" action="{% url 'profile' %}">
+                                        {% csrf_token %}
+                                        
                                         <div class="mb-3">
                                             <div class="d-flex align-items-center justify-content-between">
-                                                <label for="exampleInputEmail1" class="form-label">Имя</label>
+                                                <label for="id_name" class="form-label">Имя</label>
                                                 <small><a href="#" class="link-dark foodplan_green">изменить</a></small>
                                             </div>
                                         
-                                            <input type="text" class="form-control" id="name">
+                                            <input type="text" class="form-control" name="name" required id="id_name">
                                         </div>
                                         <div class="mb-3">
-                                            <label for="exampleInputEmail1" class="form-label">Email</label>
-                                            <input type="email" class="form-control" id="email" aria-describedby="emailHelp">
+                                            <label for="id_email" class="form-label">Email</label>
+                                            <input type="email" class="form-control" name="email" required id="id_email" aria-describedby="emailHelp">
                                         </div>
                                         <div class="mb-3">
                                             <div class="d-flex align-items-center justify-content-between">
@@ -76,11 +78,11 @@
                                                 <small><a href="#" class="link-dark foodplan_green">изменить</a></small>
                                             </div>
                                         
-                                            <input type="password" class="form-control" id="password">
+                                            <input type="password" class="form-control" name="password" id="password">
                                         </div>
                                         <div class="mb-3">
                                             <label for="exampleInputPassword1" class="form-label">Подтверждение пароля</label>
-                                            <input type="password" class="form-control" id="PasswordConfirm">
+                                            <input type="password" class="form-control" name="password_confirm" id="PasswordConfirm">
                                         </div>
                                         <div class="d-block">
                                             <button type="submit" class="btn shadow-none btn-outline-success foodplan_green foodplan__border_green">Сохранить

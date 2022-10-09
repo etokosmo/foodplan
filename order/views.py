@@ -1,8 +1,10 @@
 from django import forms
 from django.shortcuts import render
+from .models import Promocode, Order
+from recipes.models import FoodCategory
 
 
-class UserForm(forms.Form):
+class OrderForm(forms.Form):
     ONEMONTH = 1
     THREEMONTH = 3
     SIXMONTH = 6
@@ -53,42 +55,116 @@ class UserForm(forms.Form):
                                 widget=forms.Select(
                                     attrs={'class': 'form-select',
                                            'onchange': 'submit();'}))
-    person_amount = forms.ChoiceField(choices=PERSON_AMOUNT,
+    amount_person = forms.ChoiceField(choices=PERSON_AMOUNT,
                                       widget=forms.Select(
                                           attrs={'class': 'form-select',
                                                  'onchange': 'submit();'}))
 
 
+class PromoForm(forms.Form):
+    promocode = forms.CharField(
+        widget=forms.TextInput(attrs={'class': 'form-control me-2'}))
+
+
+class FoodCategoryForm(forms.Form):
+    CLASSIC = 100
+    LOWCARB = 200
+    VEGETERIAN = 300
+    KETO = 400
+    FOOD_CHOICES = [
+        (CLASSIC, 'Классическое'),
+        (LOWCARB, 'Низкоуглеводное'),
+        (VEGETERIAN, 'Вегетарианское '),
+        (KETO, 'Кето'),
+    ]
+    food_category = forms.ChoiceField(choices=FOOD_CHOICES,
+                                      widget=forms.RadioSelect(
+                                          attrs={'name': 'foodtype',
+                                                 'class': 'foodplan_selected d-none',
+                                                 'onchange': 'submit();'}))
+
+
 def create_order(request):
+    if request.user.is_anonymous:
+        return render(request, 'account/login.html')
     logged_user = request.user
+    order, created = Order.objects.get_or_create(user=logged_user)
+    print(order.time)
+    user_promocode = ""
+    correct_promocode = False
 
-    result = 200
-    time = 1
-    breakfast = 50
-    lunch = 50
-    dinner = 50
-    dessert = 50
-    person_amount = 1
-
-    form = UserForm(request.POST or None)
+    form = OrderForm(request.POST or None)
+    promo_form = PromoForm(request.POST or None)
+    food_form = FoodCategoryForm(request.POST or None)
+    if food_form.is_valid():
+        food_form_cost = int(food_form.cleaned_data.get("food_category"))
+        if food_form_cost == 100:
+            order.category = FoodCategory.objects.get(title='Классическое')
+        if food_form_cost == 200:
+            order.category = FoodCategory.objects.get(title='Низкоуглеводное')
+        if food_form_cost == 300:
+            order.category = FoodCategory.objects.get(title='Вегетарианское')
+        if food_form_cost == 400:
+            order.category = FoodCategory.objects.get(title='Кето')
+        order.food_form_cost = food_form_cost
+        order.save()
     if form.is_valid():
-        time = form.cleaned_data.get("time")
+        order.time = form.cleaned_data.get("time")
         breakfast = form.cleaned_data.get("breakfast")
+        if breakfast == '0':
+            order.breakfast = False
+        else:
+            order.breakfast = True
         lunch = form.cleaned_data.get("lunch")
+        if lunch == '0':
+            order.lunch = False
+        else:
+            order.lunch = True
         dinner = form.cleaned_data.get("dinner")
+        if dinner == '0':
+            order.dinner = False
+        else:
+            order.dinner = True
         dessert = form.cleaned_data.get("dessert")
-        person_amount = form.cleaned_data.get("person_amount")
-        result = int(time) * int(person_amount) * (
-            int(breakfast) + int(lunch) + int(dinner) + int(dessert)
+        if dessert == '0':
+            order.dessert = False
+        else:
+            order.dessert = True
+        order.amount_person = form.cleaned_data.get("amount_person")
+        order.result = int(order.time) * int(order.amount_person) * (
+                int(order.breakfast) * 50 +
+                int(order.lunch) * 50 +
+                int(order.dinner) * 50 +
+                int(order.dessert) * 50
         )
+        order.save()
+    if promo_form.is_valid():
+        try:
+            user_promocode = promo_form.cleaned_data.get("promocode")
+            try:
+                promocode = Promocode.objects.get(promocode=user_promocode)
+                discount = promocode.discount / 100
+                order.result = order.result - order.result * discount
+
+                correct_promocode = True
+            except Promocode.DoesNotExist:
+                pass
+        except AttributeError:
+            pass
+    order.result += order.food_form_cost
     context = {'form': form,
-               'result': result,
-               'time': time,
-               'breakfast': breakfast,
-               'lunch': lunch,
-               'dinner': dinner,
-               'dessert': dessert,
-               'person_amount': person_amount,
+               'promo_form': promo_form,
+               'food_form': food_form,
+               'result': order.result,
+               'time': order.time,
+               'breakfast': order.breakfast,
+               'lunch': order.lunch,
+               'dinner': order.dinner,
+               'dessert': order.dessert,
+               'amount_person': order.amount_person,
+               'promocode': user_promocode,
+               'correct_promocode': correct_promocode,
+               'food_form_cost': order.food_form_cost,
                }
 
     return render(request, 'order/order.html', context=context)
