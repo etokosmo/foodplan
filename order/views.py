@@ -92,6 +92,8 @@ def create_order(request):
         return render(request, 'account/login.html')
     logged_user = request.user
     order, created = Order.objects.get_or_create(user=logged_user)
+    if order.is_paid:
+        return render(request, 'lk.html')
     user_promocode = ""
     correct_promocode = False
 
