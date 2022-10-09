@@ -29,16 +29,15 @@ class ProfileView(View):
         return render(request, 'lk.html', context)
 
     def post(self, request):
+        print(request.POST, request.FILES)
         form = UserUpdateForm(request.POST, request.FILES, instance=self.profile)
 
         if form.is_valid():
             profile = form.save()
             profile.user.name = form.cleaned_data.get('name')
             profile.user.email = form.cleaned_data.get('email')
-            print(form.cleaned_data.get('email'))
             profile.user.save()
-
-            messages.success(request, 'Profile saved successfully')
+            messages.success(request, 'Данные профиля успешно обновлены')
         else:
             messages.error(request, form_validation_error(form))
         return redirect('profile')

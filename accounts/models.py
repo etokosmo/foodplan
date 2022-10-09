@@ -13,7 +13,7 @@ class Profile(models.Model):
     ]
 
     user = models.OneToOneField(User, related_name="profile", on_delete=models.CASCADE)
-    avatar = models.ImageField(null=True, blank=True)
+    avatar = models.ImageField(null=True, blank=True, default='test_avatar.png')
     birthday = models.DateField(null=True, blank=True)
     gender = models.PositiveSmallIntegerField(choices=GENDER_CHOICES, null=True, blank=True)
     phone = models.CharField(max_length=32, null=True, blank=True)

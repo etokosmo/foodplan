@@ -25,7 +25,7 @@ urlpatterns = [
     path('order/', include('order.urls')),
     path('api-auth/', include('rest_framework.urls')),
     path('accounts/', include('allauth.urls')),
-    path('lk/', LkPageView.as_view(), name='lk'),
+    # path('lk/', LkPageView.as_view(), name='lk'),
     path('profile', ProfileView.as_view(), name='profile'),
     path('', HomePageView.as_view(), name='home')
 
