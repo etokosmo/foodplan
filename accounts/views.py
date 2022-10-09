@@ -28,7 +28,7 @@ class ProfileView(View):
 
     def get(self, request):
         context = {'profile': self.profile, 'segment': 'profile'}
-        order = Order.objects.filter(user=request.user).first()
+        order = Order.objects.filter(user=request.user, is_paid=True).first()
         if order:
             context['order'] = order.get_description_with_day_menu(date.today())
         return render(request, 'lk.html', context)
