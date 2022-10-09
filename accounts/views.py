@@ -4,6 +4,8 @@ from .forms import UserUpdateForm, form_validation_error
 from django.views import View
 from .models import Profile
 from django.contrib import messages
+from datetime import date
+from order.models import Order
 
 
 # Create your views here.
@@ -26,6 +28,9 @@ class ProfileView(View):
 
     def get(self, request):
         context = {'profile': self.profile, 'segment': 'profile'}
+        order = Order.objects.filter(user=request.user).first()
+        if order:
+            context['order'] = order.get_description_with_day_menu(date.today())
         return render(request, 'lk.html', context)
 
     def post(self, request):
@@ -42,4 +47,4 @@ class ProfileView(View):
         else:
             messages.error(request, form_validation_error(form))
         return redirect('profile')
-    
+

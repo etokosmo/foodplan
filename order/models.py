@@ -79,6 +79,10 @@ class Order(models.Model):
     def __str__(self):
         return f"{self.user} - {self.category}"
 
+    @property
+    def amount_meals(self):
+        return int(self.breakfast) + int(self.lunch) + int(self.dinner) + int(self.dessert)
+
     def get_day_menu(self, date):
         day_menu, created = DayMenu.objects.get_or_create(
             order=self,
@@ -87,6 +91,27 @@ class Order(models.Model):
         if created:
             day_menu.fill_recipes()
         return day_menu
+
+    def get_description_with_day_menu(self, date):
+        day_menu = self.get_day_menu(date)
+        calories = (
+                (day_menu.breakfast.calories if day_menu.breakfast else 0) +
+                (day_menu.lunch.calories if day_menu.lunch else 0) +
+                (day_menu.dinner.calories if day_menu.dinner else 0) +
+                (day_menu.dessert.calories if day_menu.dessert else 0)
+        )
+        order = {
+            'description': self.category,
+            'amount_person': self.amount_person,
+            'date': date,
+            'breakfast': day_menu.breakfast,
+            'lunch': day_menu.lunch,
+            'dinner': day_menu.dinner,
+            'dessert': day_menu.dessert,
+            'amount_meals': self.amount_meals,
+            'calories': calories
+        }
+        return order
 
 
 class Promocode(models.Model):
