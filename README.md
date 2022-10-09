@@ -49,6 +49,8 @@ pip install -r requirements.txt
 
 `MEDIA_URL` - URL that handles the media served from MEDIA_ROOT, used for managing stored files. It must end in a slash if set to a non-empty value.
 
+`SBOL_SECRET_TOKEN` - Sberbank PAY TOKEN. For more information check [this](https://securepayments.sberbank.ru/wiki/doku.php/integration:paybutton:start).
+
 - Create your database with the command:
 ```bash
 python manage.py makemigrations
