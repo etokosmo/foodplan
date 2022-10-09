@@ -76,7 +76,7 @@ class FoodCategoryForm(forms.Form):
     KETO = 400
     FOOD_CHOICES = [
         (CLASSIC, 'Классическое'),
-        (LOWCARB, 'Низкоуглеводное'),
+        (LOWCARB, 'Низкокалорийное'),
         (VEGETERIAN, 'Вегетарианское '),
         (KETO, 'Кето'),
     ]
@@ -103,7 +103,7 @@ def create_order(request):
         if food_form_cost == 100:
             order.category = FoodCategory.objects.get(title='Классическое')
         if food_form_cost == 200:
-            order.category = FoodCategory.objects.get(title='Низкоуглеводное')
+            order.category = FoodCategory.objects.get(title='Низкокалорийное')
         if food_form_cost == 300:
             order.category = FoodCategory.objects.get(title='Вегетарианское')
         if food_form_cost == 400:
