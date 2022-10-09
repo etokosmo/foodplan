@@ -9,6 +9,10 @@
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="{% static 'order/style.css' %}">
     <title>Foodplan 2021 - Меню на неделю FOODPLAN</title>
+    <script src="https://3dsec.sberbank.ru/payment/docsite/assets/js/ipay.js"></script>
+    <script>
+        var ipay = new IPAY({api_token: 'YRF3C5RFICWISEWFR6GJ'});
+    </script>
 </head>
 <body>
     <header>
@@ -211,7 +215,17 @@
                     {% endif %}
                 {% endif %}
                 <div class="d-flex justify-content-center my-5">
-                    <button form="order" type="submit" class="btn shadow-none btn-outline-success foodplan_green foodplan__border_green w-50">Оплатить</button>
+                    <a onclick="ipayCheckout({
+                        amount:{{ result }},
+                        currency:'RUB',
+                        order_number:'',
+                        description: 'Подписка на FoodPlan'},
+                        function(order) { showSuccessfulPurchase(order) },
+                        function(order) { showFailurefulPurchase(order) })"
+
+                        class="btn shadow-none btn-outline-success foodplan_green foodplan__border_green w-50">Оплатить
+                    </a>
+<!--                    <button form="order" type="submit" class="btn shadow-none btn-outline-success foodplan_green foodplan__border_green w-50">Оплатить</button>-->
                 </div>
             </div>
         </section>
@@ -226,5 +240,11 @@
         // Прокручиваем страницу к scrollX и scrollY из localStorage (либо 0,0 если там еще ничего нет)
         let mass = [...cords.map(cord => localStorage[cord])];
         window.scroll({left:mass[0], top:mass[1], behavior: 'instant'});
+    </script>
+    <script>
+
+       function showSuccessfulPurchase() {
+       setTimeout(() => { location.href = '{% url 'order:success_payment' %}'; }, 3000);
+       }
     </script>
 </body>

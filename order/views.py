@@ -1,7 +1,10 @@
 from django import forms
+from django.conf import settings
+from django.shortcuts import redirect
 from django.shortcuts import render
-from .models import Promocode, Order
+
 from recipes.models import FoodCategory
+from .models import Promocode, Order
 
 
 class OrderForm(forms.Form):
@@ -89,7 +92,6 @@ def create_order(request):
         return render(request, 'account/login.html')
     logged_user = request.user
     order, created = Order.objects.get_or_create(user=logged_user)
-    print(order.time)
     user_promocode = ""
     correct_promocode = False
 
@@ -165,6 +167,15 @@ def create_order(request):
                'promocode': user_promocode,
                'correct_promocode': correct_promocode,
                'food_form_cost': order.food_form_cost,
+               'SBOL_SECRET_TOKEN': settings.SBOL_SECRET_TOKEN,
                }
 
     return render(request, 'order/order.html', context=context)
+
+
+def success_payment(request):
+    logged_user = request.user
+    order = Order.objects.get(user=logged_user)
+    order.is_paid = True
+    order.save()
+    return redirect('/profile')

@@ -60,15 +60,15 @@
                     <div class="card col-12 col-md-10 p-3 mb-3 foodplan__shadow">
                             <ul class="nav nav-tabs">
                                 <li class="nav-item foodplan__tab-item">
-                                    <button id="tab1" class="btn shadow-none foodplan__tab-button active" data-bs-toggle="tab" data-bs-target="#data">Персональные данные</button>
+                                    <button id="tab1" class="btn shadow-none foodplan__tab-button" data-bs-toggle="tab" data-bs-target="#data">Персональные данные</button>
                                 </li>
                                 <li class="nav-item foodplan__tab-item">
-                                    <button id="tab2" class="btn shadow-none foodplan__tab-button" data-bs-toggle="tab" data-bs-target="#menu">Моё меню</button>
+                                    <button id="tab2" class="btn shadow-none foodplan__tab-button active" data-bs-toggle="tab" data-bs-target="#menu">Моё меню</button>
                                 </li>
                                 <li class="nav-item foodplan__tab-item flex-grow-1"></li>
                             </ul>
                             <div class="tab-content mt-2">
-                                <div class="tab-pane fade show active" id="data">
+                                <div class="tab-pane fade" id="data">
                                         <div class="mb-3">
                                             <div class="d-flex align-items-center justify-content-between">
                                                 <label for="id_name" class="form-label">Имя</label>
@@ -98,41 +98,55 @@
                                                 изменения</button>
                                         </div>
                                 </div>
-                                <div class="tab-pane fade" id="menu">
+                                <div class="tab-pane fade show active" id="menu">
                                     <div class="row">
+                                        {% if order %}
                                         <div class="col-2">
                                             <img src="{% static 'circle1.png' %}" alt="" class="w-100">
                                         </div>
                                         <div class="col-10 col-md-10">
                                             <div class="row">
                                                 <div class="col-12">
-                                                    <h2>Название подписки</h2>
+                                                    <h2>{{ order.description }}</h2>
                                                 </div>
                                                 <div class="col-md-12 col-lg-9">
-                                                    <h6>Описание подписки Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eius saepe ea nobis necessitatibus
-                                                        consectetur rem! Eligendi assumenda facere sint quibusdam dolorem quasi doloribus nemo, temporibus molestiae
-                                                        distinctio cum laboriosam sed. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eius saepe ea nobis
-                                                        necessitatibus consectetur rem! Eligendi
-                                                        assumenda facere sint quibusdam dolorem quasi doloribus nemo, temporibus molestiae distinctio cum laboriosam
-                                                        sed.</h6>
+                                                    <h6>Ваше меню на {{ order.date }}:</h6>
+                                                    {% if order.breakfast %}
+                                                    Завтрак: <a href="{% url 'recipes:recipe_page' order.breakfast.id %}">{{ order.breakfast.title }}</a>
+                                                    <br>
+                                                    {% endif %}
+                                                    {% if order.lunch %}
+                                                    Обед: <a href="{% url 'recipes:recipe_page' order.lunch.id %}">{{ order.lunch.title }}</a>
+                                                    <br>
+                                                    {% endif %}
+                                                    {% if order.dinner %}
+                                                    Ужин: <a href="{% url 'recipes:recipe_page' order.dinner.id %}">{{ order.dinner.title }}</a>
+                                                    <br>
+                                                    {% endif %}
+                                                    {% if order.dessert %}
+                                                    Десерт: <a href="{% url 'recipes:recipe_page' order.dessert.id %}">{{ order.dessert.title }}</a>
+                                                    <br>
+                                                    {% endif %}
                                                 </div>
                                                 <div class="col-md-12 col-lg-3 text-muted d-flex flex-column justify-content-between">
                                                     <div class="d-flex flex-row justify-content-between">
-                                                        <small>Персоны: </small><small>3</small>
+                                                        <small>Персоны: </small><small>{{ order.amount_person }}</small>
                                                     </div>
                                                     <div class="d-flex flex-row justify-content-between">
                                                         <small>Аллергии: </small><small>нет</small>
                                                     </div>
                                                     <div class="d-flex flex-row justify-content-between">
-                                                        <small>Калории: </small><small>1400</small>
+                                                        <small>Калории: </small><small>{{ order.calories }}</small>
                                                     </div>
                                                     <div class="d-flex flex-row justify-content-between">
-                                                        <small>Кол-во приёмов пищи: </small><small>4</small>
+                                                        <small>Кол-во приёмов пищи: </small><small>{{ order.amount_meals }}</small>
                                                     </div>
-                                                    
                                                 </div>
                                             </div>
                                         </div>
+                                        {% else %}
+                                            <h6>У вас нет активной подписки</h6>
+                                        {% endif %}
                                     </div>
                                 </div>
                             </div>                
