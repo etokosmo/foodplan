@@ -81,7 +81,7 @@
                         <tr>
                             <th scope="row" class="text-start">Срок</th>
                             <td>
-                                <select name="time" class="form-select" onchange="submit();" id="id_time">
+                                <select name="time" class="form-select" onchange="submit(); changeTime(this);" id="id_time">
                                   <option value="1" {% if time == '1' %}selected="selected"{% endif %}>1 месяц</option>
 
                                   <option value="3" {% if time == '3' %}selected="selected"{% endif %}>3 месяца</option>
@@ -140,7 +140,7 @@
                         <tr>
                             <th scope="row" class="text-start">Кол-во персон</th>
                             <td>
-                                <select name="amount_person" class="form-select" onchange="submit();" id="id_amount_person">
+                                <select name="amount_person" class="form-select" onchange="submit(); changeAmountPerson(this);" id="id_amount_person">
                                   <option value="1" {% if amount_person == '1' %}selected="selected"{% endif %}>1</option>
 
                                   <option value="2" {% if amount_person == '2' %}selected="selected"{% endif %}>2</option>
@@ -246,5 +246,21 @@
        function showSuccessfulPurchase() {
        setTimeout(() => { location.href = '{% url 'order:success_payment' %}'; }, 3000);
        }
+    </script>
+    <script>
+        function changeAmountPerson(el) {
+          localStorage.id_amount_person = el ? el.value : localStorage.id_amount_person || "1";
+          document.getElementById("id_amount_person").value = localStorage.id_amount_person
+        }
+
+        changeAmountPerson();
+    </script>
+    <script>
+    function changeTime(el) {
+      localStorage.id_time = el ? el.value : localStorage.id_time || "1";
+      document.getElementById("id_time").value = localStorage.id_time
+    }
+
+    changeTime();
     </script>
 </body>
