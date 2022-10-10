@@ -116,6 +116,12 @@ class Recipe(models.Model):
         related_name='recipes',
         blank=True,
     )
+    allergy_categories = models.ManyToManyField(
+        AllergyCategory,
+        related_name='recipes',
+        blank=True,
+        null=True,
+    )
 
     class Meta:
         verbose_name = 'Рецепт'
