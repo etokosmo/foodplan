@@ -133,8 +133,13 @@
                                                         <small>Персоны: </small><small>{{ order.amount_person }}</small>
                                                     </div>
                                                     <div class="d-flex flex-row justify-content-between">
-                                                        <small>Аллергии: </small><small>нет</small>
+                                                        <small>Аллергии: </small>
                                                     </div>
+                                                    {% for allergy in order.allergies %}
+                                                    <div class="d-flex flex-row justify-content-between">
+                                                        <div style="size=1px">{{ allergy }}</div>
+                                                    </div>
+                                                    {% endfor %}
                                                     <div class="d-flex flex-row justify-content-between">
                                                         <small>Калории: </small><small>{{ order.calories }}</small>
                                                     </div>

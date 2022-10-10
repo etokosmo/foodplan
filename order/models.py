@@ -118,7 +118,8 @@ class Order(models.Model):
             'dinner': day_menu.dinner,
             'dessert': day_menu.dessert,
             'amount_meals': self.amount_meals,
-            'calories': calories
+            'calories': calories,
+            'allergies': [allergy.title for allergy in self.allergies.all()]
         }
         return order
 
@@ -196,7 +197,8 @@ class DayMenu(models.Model):
         recipes = Recipe.objects.filter(
             food_category=self.order.category,
             portions__gte=self.order.amount_person,
-        ).order_by('?')
+        ).exclude(allergy_categories__in=self.order.allergies.all()).order_by('?')
+        print(self.order.allergies.all())
         if self.order.breakfast:
             self.breakfast = recipes.filter(
                 period__period='Завтрак'
