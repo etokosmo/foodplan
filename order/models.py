@@ -198,7 +198,6 @@ class DayMenu(models.Model):
             food_category=self.order.category,
             portions__gte=self.order.amount_person,
         ).exclude(allergy_categories__in=self.order.allergies.all()).order_by('?')
-        print(self.order.allergies.all())
         if self.order.breakfast:
             self.breakfast = recipes.filter(
                 period__period='Завтрак'
