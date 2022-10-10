@@ -8,6 +8,20 @@ def get_upload_path(instance, filename):
     return Path(instance.title) / filename
 
 
+class AllergyCategory(models.Model):
+    title = models.CharField(
+        verbose_name="Название",
+        max_length=200,
+    )
+
+    class Meta:
+        verbose_name = 'Категория Аллергии'
+        verbose_name_plural = 'Категории Аллергий'
+
+    def __str__(self):
+        return self.title
+
+
 class FoodCategory(models.Model):
     title = models.CharField(
         verbose_name="Название",
@@ -42,6 +56,14 @@ class Ingredient(models.Model):
     title = models.CharField(
         verbose_name="Название",
         max_length=200
+    )
+    allergy_category = models.ForeignKey(
+        AllergyCategory,
+        on_delete=models.SET_NULL,
+        verbose_name="Аллергии",
+        related_name="ingredients",
+        blank=True,
+        null=True,
     )
 
     class Meta:

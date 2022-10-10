@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Promocode, Order, DayMenu
+from .models import Promocode, Order, DayMenu, AllergyCategory
 
 
 @admin.register(Promocode)
@@ -17,3 +17,8 @@ class OrderAdmin(admin.ModelAdmin):
 @admin.register(DayMenu)
 class DayMenuAdmin(admin.ModelAdmin):
     list_display = ["order", "date", "breakfast", "lunch", "dinner", "dessert"]
+
+
+@admin.register(AllergyCategory)
+class AllergyCategoryAdmin(admin.ModelAdmin):
+    list_display = ["title"]

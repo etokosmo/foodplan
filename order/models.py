@@ -1,25 +1,11 @@
 from django.contrib.auth.models import User
 from django.db import models
 
-from recipes.models import FoodCategory, Recipe
+from recipes.models import FoodCategory, Recipe, AllergyCategory
 
 
 def get_default_category():
     return FoodCategory.objects.get(title='Классическое')
-
-
-class AllergyCategory(models.Model):
-    title = models.CharField(
-        verbose_name="Название",
-        max_length=200,
-    )
-
-    class Meta:
-        verbose_name = 'Категория Аллергии'
-        verbose_name_plural = 'Категории Аллергий'
-
-    def __str__(self):
-        return self.title
 
 
 class Order(models.Model):
