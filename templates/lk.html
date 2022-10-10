@@ -45,7 +45,7 @@
                             <img src="{{ profile.avatar.url }}" alt="" width="100" height="100" class="rounded-pill">
                             <label for="id_avatar">
                             <span class="badge rounded-circle position-absolute bottom-0 end-0 foodplan__bg_green avatar__plus">+
-                                <input type="file" class="form-control" name="avatar" accept=".jpg, .jpeg, .png" required id="id_avatar" hidden>
+                                
                             </span>
                             </label>
                         </div>
@@ -94,6 +94,7 @@
                                             <label for="exampleInputPassword1" class="form-label">Подтверждение пароля</label>
                                             <input type="password" class="form-control" name="password_confirm" id="PasswordConfirm">
                                         </div>
+                                        <input type="file" class="form-control" name="avatar" accept=".jpg, .jpeg, .png" id="id_avatar" hidden>
                                         <div class="d-block">
                                             <button type="submit" class="btn shadow-none btn-outline-success foodplan_green foodplan__border_green" disabled>Сохранить
                                                 изменения</button>
