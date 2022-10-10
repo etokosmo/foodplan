@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 {% load static %}
+{% load floattags %}
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -226,7 +227,7 @@
                 {% endif %}
                 <div class="d-flex justify-content-center my-5">
                     <a onclick="ipayCheckout({
-                        amount:{{ result }},
+                        amount:{{ result|formatted_float }},
                         currency:'RUB',
                         order_number:'',
                         description: 'Подписка на FoodPlan'},

@@ -63,26 +63,32 @@ class OrderForm(forms.Form):
                                           attrs={'class': 'form-select',
                                                  'onchange': 'submit();'}))
     milk_allergy = forms.BooleanField(
+        required=False,
         widget=forms.CheckboxInput(
             attrs={'class': 'form-check-input me-1 foodplan_checked-green',
                    'onchange': 'submit();'}))
     nuts_allergy = forms.BooleanField(
+        required=False,
         widget=forms.CheckboxInput(
             attrs={'class': 'form-check-input me-1 foodplan_checked-green',
                    'onchange': 'submit();'}))
     honey_allergy = forms.BooleanField(
+        required=False,
         widget=forms.CheckboxInput(
             attrs={'class': 'form-check-input me-1 foodplan_checked-green',
                    'onchange': 'submit();'}))
     cereal_allergy = forms.BooleanField(
+        required=False,
         widget=forms.CheckboxInput(
             attrs={'class': 'form-check-input me-1 foodplan_checked-green',
                    'onchange': 'submit();'}))
     meat_allergy = forms.BooleanField(
+        required=False,
         widget=forms.CheckboxInput(
             attrs={'class': 'form-check-input me-1 foodplan_checked-green',
                    'onchange': 'submit();'}))
     fish_allergy = forms.BooleanField(
+        required=False,
         widget=forms.CheckboxInput(
             attrs={'class': 'form-check-input me-1 foodplan_checked-green',
                    'onchange': 'submit();'}))
@@ -172,6 +178,59 @@ def create_order(request):
                 int(order.dessert) * 50
         )
         milk_allergy = form.cleaned_data.get("milk_allergy")
+        nuts_allergy = form.cleaned_data.get("nuts_allergy")
+        honey_allergy = form.cleaned_data.get("honey_allergy")
+        cereal_allergy = form.cleaned_data.get("cereal_allergy")
+        meat_allergy = form.cleaned_data.get("meat_allergy")
+        fish_allergy = form.cleaned_data.get("fish_allergy")
+        milk_allergy_obj, created = AllergyCategory.objects.get_or_create(
+            title=
+            "Молочные продукты")
+        nuts_allergy_obj, created = AllergyCategory.objects.get_or_create(
+            title=
+            "Орехи и бобовые")
+        honey_allergy_obj, created = AllergyCategory.objects.get_or_create(
+            title=
+            "Продукты пчеловодства")
+        cereal_allergy_obj, created = AllergyCategory.objects.get_or_create(
+            title=
+            "Зерновые")
+        meat_allergy_obj, created = AllergyCategory.objects.get_or_create(
+            title=
+            "Мясо")
+        fish_allergy_obj, created = AllergyCategory.objects.get_or_create(
+            title=
+            "Рыба и морепродукты")
+        if milk_allergy:
+            order.allergies.add(milk_allergy_obj)
+        else:
+            if milk_allergy_obj in order.allergies.all():
+                order.allergies.remove(milk_allergy_obj)
+        if nuts_allergy:
+            order.allergies.add(nuts_allergy_obj)
+        else:
+            if nuts_allergy_obj in order.allergies.all():
+                order.allergies.remove(nuts_allergy_obj)
+        if honey_allergy:
+            order.allergies.add(honey_allergy_obj)
+        else:
+            if honey_allergy_obj in order.allergies.all():
+                order.allergies.remove(honey_allergy_obj)
+        if cereal_allergy:
+            order.allergies.add(cereal_allergy_obj)
+        else:
+            if cereal_allergy_obj in order.allergies.all():
+                order.allergies.remove(cereal_allergy_obj)
+        if meat_allergy:
+            order.allergies.add(meat_allergy_obj)
+        else:
+            if meat_allergy_obj in order.allergies.all():
+                order.allergies.remove(meat_allergy_obj)
+        if fish_allergy:
+            order.allergies.add(fish_allergy_obj)
+        else:
+            if fish_allergy_obj in order.allergies.all():
+                order.allergies.remove(fish_allergy_obj)
         order.save()
     if promo_form.is_valid():
         try:
@@ -188,49 +247,6 @@ def create_order(request):
             pass
 
     order.result += order.food_form_cost
-
-    milk_allergy_obj, created = AllergyCategory.objects.get_or_create(title=
-        "Молочные продукты")
-    nuts_allergy_obj, created = AllergyCategory.objects.get_or_create(title=
-        "Орехи и бобовые")
-    honey_allergy_obj, created = AllergyCategory.objects.get_or_create(title=
-        "Продукты пчеловодства")
-    cereal_allergy_obj, created = AllergyCategory.objects.get_or_create(title=
-        "Зерновые")
-    meat_allergy_obj, created = AllergyCategory.objects.get_or_create(title=
-        "Мясо")
-    fish_allergy_obj, created = AllergyCategory.objects.get_or_create(title=
-        "Рыба и морепродукты")
-    if milk_allergy:
-        order.allergies.add(milk_allergy_obj)
-    else:
-        if milk_allergy in order.allergies.all():
-            order.allergies.remove(milk_allergy_obj)
-    if nuts_allergy:
-        order.allergies.add(nuts_allergy_obj)
-    else:
-        if nuts_allergy in order.allergies.all():
-            order.allergies.remove(nuts_allergy_obj)
-    if honey_allergy:
-        order.allergies.add(honey_allergy_obj)
-    else:
-        if honey_allergy in order.allergies.all():
-            order.allergies.remove(honey_allergy_obj)
-    if cereal_allergy:
-        order.allergies.add(cereal_allergy_obj)
-    else:
-        if cereal_allergy in order.allergies.all():
-            order.allergies.remove(cereal_allergy_obj)
-    if meat_allergy:
-        order.allergies.add(meat_allergy_obj)
-    else:
-        if meat_allergy in order.allergies.all():
-            order.allergies.remove(meat_allergy_obj)
-    if fish_allergy:
-        order.allergies.add(fish_allergy_obj)
-    else:
-        if fish_allergy in order.allergies.all():
-            order.allergies.remove(fish_allergy_obj)
     order.save()
 
     context = {'form': form,
