@@ -1,10 +1,25 @@
-from django.db import models
 from django.contrib.auth.models import User
+from django.db import models
+
 from recipes.models import FoodCategory, Recipe
 
 
 def get_default_category():
     return FoodCategory.objects.get(title='Классическое')
+
+
+class AllergyCategory(models.Model):
+    title = models.CharField(
+        verbose_name="Название",
+        max_length=200,
+    )
+
+    class Meta:
+        verbose_name = 'Категория Аллергии'
+        verbose_name_plural = 'Категории Аллергий'
+
+    def __str__(self):
+        return self.title
 
 
 class Order(models.Model):
@@ -71,6 +86,14 @@ class Order(models.Model):
         verbose_name="Оплачен",
         default=False,
     )
+    allergies = models.ForeignKey(
+        AllergyCategory,
+        on_delete=models.SET_NULL,
+        verbose_name="Аллергии",
+        related_name="orders",
+        blank=True,
+        null=True,
+    )
 
     class Meta:
         verbose_name = 'Заказ'
@@ -81,7 +104,8 @@ class Order(models.Model):
 
     @property
     def amount_meals(self):
-        return int(self.breakfast) + int(self.lunch) + int(self.dinner) + int(self.dessert)
+        return int(self.breakfast) + int(self.lunch) + int(self.dinner) + int(
+            self.dessert)
 
     def get_day_menu(self, date):
         day_menu, created = DayMenu.objects.get_or_create(

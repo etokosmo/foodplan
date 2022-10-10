@@ -15,7 +15,7 @@ class PeriodAdmin(admin.ModelAdmin):
 
 @admin.register(Ingredient)
 class IngredientAdmin(admin.ModelAdmin):
-    pass
+    search_fields = ["title"]
 
 
 @admin.register(Recipe)
