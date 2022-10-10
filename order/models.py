@@ -72,9 +72,8 @@ class Order(models.Model):
         verbose_name="Оплачен",
         default=False,
     )
-    allergies = models.ForeignKey(
+    allergies = models.ManyToManyField(
         AllergyCategory,
-        on_delete=models.SET_NULL,
         verbose_name="Аллергии",
         related_name="orders",
         blank=True,

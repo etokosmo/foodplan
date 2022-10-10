@@ -170,37 +170,37 @@
                             <th scope="row" class="text-start">Аллергии</th>
                             <td>
                                 <div class="form-check d-flex justify-content-start">
-                                    <input class="form-check-input me-1 foodplan_checked-green" type="checkbox" value="" name="allergy1">
+                                    <input type="checkbox" name="fish_allergy" class="form-check-input me-1 foodplan_checked-green" onchange="submit();" onclick="saveFish()" required="" id="id_fish_allergy">
                                     <label class="form-check-label" for="allergy1">
                                         Рыба и морепродукты
                                     </label>
                                 </div>
                                 <div class="form-check d-flex justify-content-start">
-                                    <input class="form-check-input me-1 foodplan_checked-green" type="checkbox" value="" name="allergy2">
+                                    <input type="checkbox" name="meat_allergy" class="form-check-input me-1 foodplan_checked-green" onchange="submit();" onclick="saveMeat()" required="" id="id_meat_allergy">
                                     <label class="form-check-label" for="allergy2">
                                         Мясо
                                     </label>
                                 </div>
                                 <div class="form-check d-flex justify-content-start">
-                                    <input class="form-check-input me-1 foodplan_checked-green" type="checkbox" value="" name="allergy3">
+                                    <input type="checkbox" name="cereal_allergy" class="form-check-input me-1 foodplan_checked-green" onchange="submit();" onclick="saveCereal()" required="" id="id_cereal_allergy">
                                     <label class="form-check-label" for="allergy3">
                                         Зерновые
                                     </label>
                                 </div>
                                 <div class="form-check d-flex justify-content-start">
-                                    <input class="form-check-input me-1 foodplan_checked-green" type="checkbox" value="" name="allergy3">
+                                    <input type="checkbox" name="honey_allergy" class="form-check-input me-1 foodplan_checked-green" onchange="submit();" onclick="saveHoney()" required="" id="id_honey_allergy">
                                     <label class="form-check-label" for="allergy3">
                                         Продукты пчеловодства
                                     </label>
                                 </div>
                                 <div class="form-check d-flex justify-content-start">
-                                    <input class="form-check-input me-1 foodplan_checked-green" type="checkbox" value="" name="allergy3">
+                                    <input type="checkbox" name="nuts_allergy" class="form-check-input me-1 foodplan_checked-green" onchange="submit();" onclick="saveNuts()" required="" id="id_nuts_allergy">
                                     <label class="form-check-label" for="allergy3">
                                         Орехи и бобовые
                                     </label>
                                 </div>
                                 <div class="form-check d-flex justify-content-start">
-                                    <input class="form-check-input me-1 foodplan_checked-green" type="checkbox" value="" name="allergy3">
+                                    <input type="checkbox" name="milk_allergy" class="form-check-input me-1 foodplan_checked-green" onchange="submit();" onclick="saveMilk()" required="" id="id_milk_allergy">
                                     <label class="form-check-label" for="allergy3">
                                         Молочные продукты
                                     </label>
@@ -272,5 +272,65 @@
     }
 
     changeTime();
+    </script>
+    <script>
+    function saveMilk() {
+        var checkbox_milk = document.getElementById("id_milk_allergy");
+        localStorage.setItem("id_milk_allergy", checkbox_milk.checked);
+    }
+
+    //for loading
+    var checked_milk = JSON.parse(localStorage.getItem("id_milk_allergy"));
+        document.getElementById("id_milk_allergy").checked = checked_milk;
+    </script>
+    <script>
+    function saveNuts() {
+        var checkbox_nuts = document.getElementById("id_nuts_allergy");
+        localStorage.setItem("id_nuts_allergy", checkbox_nuts.checked);
+    }
+
+    //for loading
+    var checked_nuts = JSON.parse(localStorage.getItem("id_nuts_allergy"));
+        document.getElementById("id_nuts_allergy").checked = checked_nuts;
+    </script>
+    <script>
+    function saveHoney() {
+        var checkbox_honey = document.getElementById("id_honey_allergy");
+        localStorage.setItem("id_honey_allergy", checkbox_honey.checked);
+    }
+
+    //for loading
+    var checked_honey = JSON.parse(localStorage.getItem("id_honey_allergy"));
+        document.getElementById("id_honey_allergy").checked = checked_honey;
+    </script>
+    <script>
+    function saveCereal() {
+        var checkbox_cereal = document.getElementById("id_cereal_allergy");
+        localStorage.setItem("id_cereal_allergy", checkbox_cereal.checked);
+    }
+
+    //for loading
+    var checked_cereal = JSON.parse(localStorage.getItem("id_cereal_allergy"));
+        document.getElementById("id_cereal_allergy").checked = checked_cereal;
+    </script>
+    <script>
+    function saveMeat() {
+        var checkbox_meat = document.getElementById("id_meat_allergy");
+        localStorage.setItem("id_meat_allergy", checkbox_meat.checked);
+    }
+
+    //for loading
+    var checked_meat = JSON.parse(localStorage.getItem("id_meat_allergy"));
+        document.getElementById("id_meat_allergy").checked = checked_meat;
+    </script>
+    <script>
+    function saveFish() {
+        var checkbox_fish = document.getElementById("id_fish_allergy");
+        localStorage.setItem("id_fish_allergy", checkbox_fish.checked);
+    }
+
+    //for loading
+    var checked_fish = JSON.parse(localStorage.getItem("id_fish_allergy"));
+        document.getElementById("id_fish_allergy").checked = checked_fish;
     </script>
 </body>
