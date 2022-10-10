@@ -134,6 +134,7 @@ def create_recipe(request):
         period, created = Period.objects.get_or_create(
             period=recipe_period.get("period"))
         recipe.period.add(period)
+    RecipeIngredient.objects.filter(recipe=recipe).delete()
     for ingredient in serializer.validated_data['recipe_ingredient']:
         ingredient_title = ingredient.get("ingredient")
         ingredient_amount = ingredient.get("amount")
@@ -141,7 +142,6 @@ def create_recipe(request):
         ingredient_obj, created = Ingredient.objects.get_or_create(
             title=ingredient_title
         )
-        RecipeIngredient.objects.filter(recipe=recipe).delete()
         recipe_ingredient = RecipeIngredient.objects.create(
             recipe=recipe,
             ingredient=ingredient_obj,
