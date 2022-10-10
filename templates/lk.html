@@ -22,8 +22,6 @@
     </header>
     <main style="margin-top: calc(2rem + 85px);">
         <section>     
-            <form method="post" action="{% url 'profile' %}" enctype="multipart/form-data">
-                {% csrf_token %}
             <div class="container">
                 <div class="row">
                     <div class="card col-12 p-3 mb-5 foodplan__shadow">
@@ -68,11 +66,14 @@
                                 <li class="nav-item foodplan__tab-item flex-grow-1"></li>
                             </ul>
                             <div class="tab-content mt-2">
+
                                 <div class="tab-pane fade" id="data">
+                                    <form method="post" action="{% url 'profile' %}" enctype="multipart/form-data">
+                                        {% csrf_token %}
                                         <div class="mb-3">
                                             <div class="d-flex align-items-center justify-content-between">
                                                 <label for="id_name" class="form-label">Имя</label>
-                                                <small><a href="#" class="link-dark foodplan_green">изменить</a></small>
+                                                <small><a href="#" name="trigger" class="link-dark foodplan_green">изменить</a></small>
                                             </div>
                                         
                                             <input type="text" class="form-control" name="name" value="{{ profile.user }}" required id="id_name">
@@ -97,6 +98,7 @@
                                             <button type="submit" class="btn shadow-none btn-outline-success foodplan_green foodplan__border_green">Сохранить
                                                 изменения</button>
                                         </div>
+                                    </form>
                                 </div>
                                 <div class="tab-pane fade show active" id="menu">
                                     <div class="row">
@@ -153,7 +155,7 @@
                     </div>
                 </div>
             </div>
-        </form>
+
         </section>
     </main>
     <footer>
@@ -179,4 +181,22 @@
         </div>
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-   </body>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script>
+        
+     $(document).ready(function(){
+
+         $("input[name=name],input[name=email]").prop("disabled",true);
+
+         $("a[name=trigger]").on("click",function(){
+
+                 $("input[name=name],input[name=email],select").removeAttr("disabled");
+         })
+
+         $("input[name=save]").on("click",function(){
+
+             $("input[name=name],input[name=email],select").prop("disabled",true);
+         })
+     })
+    </script>   
+</body>
