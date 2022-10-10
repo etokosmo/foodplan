@@ -141,7 +141,6 @@ if __name__ == "__main__":
     env.read_env()
     django_api = env.str('DRF_CREATE_URL')
 
-
     with open('recipes_urls.json', 'r', encoding='utf-8') as file:
         recipe_urls = json.load(file)
 
@@ -155,4 +154,3 @@ if __name__ == "__main__":
             # print(recipe['title'])
         except Exception as err:
             time.sleep(1)
-
