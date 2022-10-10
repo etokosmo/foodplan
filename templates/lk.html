@@ -135,11 +135,12 @@
                                                     <div class="d-flex flex-row justify-content-between">
                                                         <small>Аллергии: </small>
                                                     </div>
-                                                    {% for allergy in order.allergies %}
+                                                    <ul>{% for allergy in order.allergies %}
                                                     <div class="d-flex flex-row justify-content-between">
-                                                        <div style="size=1px">{{ allergy }}</div>
+                                                        <li style="font-size:13px;">{{ allergy }}</li>
                                                     </div>
                                                     {% endfor %}
+                                                    </ul>
                                                     <div class="d-flex flex-row justify-content-between">
                                                         <small>Калории: </small><small>{{ order.calories }}</small>
                                                     </div>
