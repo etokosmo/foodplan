@@ -149,7 +149,6 @@ def create_order(request):
         order.food_form_cost = food_form_cost
         order.save()
     if form.is_valid():
-        print("SUCCESS")
         order.time = form.cleaned_data.get("time")
         breakfast = form.cleaned_data.get("breakfast")
         if breakfast == '0':
