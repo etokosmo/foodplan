@@ -14,10 +14,10 @@
     <header>
         <nav class="navbar navbar-expand-md navbar-light fixed-top navbar__opacity">
             <div class="container">
-                <a class="navbar-brand" href="#">
+                <a class="navbar-brand" href="{% url 'home' %}">
                     <img src="img/logo.8d8f24edbb5f.svg" height="55" width="189" alt="">
                 </a>
-                <button class="btn btn-outline-success me-2 shadow-none foodplan_green foodplan__border_green">Назад</button>
+                <a class="btn btn-outline-success me-2 shadow-none foodplan_green foodplan__border_green" href="{% url 'profile' %}">Назад</a>
             </div>
         </nav>
     </header>
@@ -61,11 +61,11 @@
     <footer>
         <nav class="navbar navbar-expand-md navbar-light mt-5">
             <div class="container p-2">
-                <a class="navbar-brand" href="#">
+                <a class="navbar-brand" href="{% url 'home' %}">
                     <img src="img/logo.8d8f24edbb5f.svg" height="55" width="189" alt="">
                 </a>
                 <div class="footer__sideBtns d-flex">
-                    <a href="#">
+                    <a href="https://vk.com/devmanorg">
                         <img src="img/vk.png" height="38" width="auto" alt="">
                     </a>
                 </div>
@@ -76,7 +76,7 @@
         <div class="container d-flex flex-row justify-content-center mb-2">
             <small class="text-center">
                 <h6>© Девман2022. Все права защищены. © Devman2022. All right reserved.</h6>
-                <a href="#" class="link-secondary">Политика конфиденциальности</a>
+                <a href="{% url 'home' %}" class="link-secondary">Политика конфиденциальности</a>
             </small>
         </div>
     </footer>
