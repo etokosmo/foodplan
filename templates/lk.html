@@ -95,7 +95,7 @@
                                             <input type="password" class="form-control" name="password_confirm" id="PasswordConfirm">
                                         </div>
                                         <div class="d-block">
-                                            <button type="submit" class="btn shadow-none btn-outline-success foodplan_green foodplan__border_green">Сохранить
+                                            <button type="submit" class="btn shadow-none btn-outline-success foodplan_green foodplan__border_green" disabled>Сохранить
                                                 изменения</button>
                                         </div>
                                     </form>
@@ -197,6 +197,7 @@
          $("a[name=trigger]").on("click",function(){
 
                  $("input[name=name],input[name=email],select").removeAttr("disabled");
+                 $("button[type=submit],select").prop("disabled",false);
          })
 
          $("input[name=save]").on("click",function(){
