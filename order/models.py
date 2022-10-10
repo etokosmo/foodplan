@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from recipes.models import FoodCategory, Recipe
+from recipes.models import FoodCategory, Recipe, Ingredient
 
 
 def get_default_category():
@@ -71,6 +71,12 @@ class Order(models.Model):
         verbose_name="Оплачен",
         default=False,
     )
+    allergies = models.ManyToManyField(
+        Ingredient,
+        verbose_name="Аллергии",
+        related_name="orders",
+        blank=True,
+    )
 
     class Meta:
         verbose_name = 'Заказ'
@@ -81,7 +87,8 @@ class Order(models.Model):
 
     @property
     def amount_meals(self):
-        return int(self.breakfast) + int(self.lunch) + int(self.dinner) + int(self.dessert)
+        return int(self.breakfast) + int(self.lunch) + int(self.dinner) + int(
+            self.dessert)
 
     def get_day_menu(self, date):
         day_menu, created = DayMenu.objects.get_or_create(
