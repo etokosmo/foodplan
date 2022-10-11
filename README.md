@@ -61,7 +61,7 @@ You can add recipe.
 ## Configurations
 
 * Python version: 3.10
-* Libraries: [requirements.txt]()
+* Libraries: [requirements.txt](https://github.com/etokosmo/foodplan/blob/main/requirements.txt)
 
 ## Launch
 
