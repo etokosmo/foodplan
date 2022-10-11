@@ -8,6 +8,19 @@ Service for providing recipes for the day, taking into account preferences.
 
 You can see this project [here]().
 
+Order
+
+![image](https://user-images.githubusercontent.com/93794917/195024418-fcc0cf36-87c5-4747-95d2-f6c5380c63e1.png)
+
+Menu
+
+![image](https://user-images.githubusercontent.com/93794917/195024504-6b7ed81e-9612-4d3a-b78d-6f0e47f4b15d.png)
+
+Recipe
+
+![image](https://user-images.githubusercontent.com/93794917/195024661-854d4361-1a83-4dbc-826b-a5941a305f54.png)
+
+
 ## API
 
 You can send POST request to `http://<YOUR_DOMEN>/recipes/api/create`.
