@@ -2,15 +2,48 @@
 
 ## About
 
-...
-
-## Project goals
-
-...
+Service for providing recipes for the day, taking into account preferences.
 
 ## Website example
 
 You can see this project [here]().
+
+## API
+
+You can send POST request to `http://<YOUR_DOMEN>/recipes/api/create`.
+
+You can add recipe.
+
+<details>
+  <summary>Example</summary>
+
+#### Request
+`http://127.0.0.1:8000/recipes/api/create`
+
+```json
+{
+    "title": "Соленая вода",
+    "period": [{"period": "Обед"}, {"period": "Ужин"}],
+    "image": "https://get.wallhere.com/photo/1920x1200-px-building-city-cityscape-Gold-Coast-1270905.jpg",
+    "recipe": "1 шаг.<br>Высыпать соль в воду.<br>2 шаг.<br>Размешать соль в воде",
+    "new_year_tag": "False",
+    "calories": 1,
+    "portions": 2,
+    "food_category": "Classic",
+    "recipe_ingredient": [
+        {"ingredient": "Water",
+         "amount": 10, "weight_type": "л"},
+        {"ingredient": "Соль",
+         "amount": 5, "weight_type": "ст.ложек"}
+    ]
+}
+```
+</details>
+
+## Parser
+
+* `parse_recipes_urls.py` - Parsing recipes from a foreign resource into a file.
+* `parse_recipes.py` - Parsing recipes to your website.
 
 ## Configurations
 
@@ -50,6 +83,8 @@ pip install -r requirements.txt
 `MEDIA_URL` - URL that handles the media served from MEDIA_ROOT, used for managing stored files. It must end in a slash if set to a non-empty value.
 
 `SBOL_SECRET_TOKEN` - Sberbank PAY TOKEN. For more information check [this](https://securepayments.sberbank.ru/wiki/doku.php/integration:paybutton:start).
+
+`DRF_CREATE_URL` - API url to create orders with parser, e.g. `http://127.0.0.1:8000/recipes/api/create`.
 
 - Create your database with the command:
 ```bash

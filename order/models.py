@@ -77,7 +77,6 @@ class Order(models.Model):
         verbose_name="Аллергии",
         related_name="orders",
         blank=True,
-        null=True,
     )
 
     class Meta:

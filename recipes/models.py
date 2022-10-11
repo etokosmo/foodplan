@@ -120,7 +120,6 @@ class Recipe(models.Model):
         AllergyCategory,
         related_name='recipes',
         blank=True,
-        null=True,
     )
 
     class Meta:

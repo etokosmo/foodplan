@@ -126,12 +126,6 @@ def create_order(request):
         return redirect('/profile')
     user_promocode = ""
     correct_promocode = False
-    milk_allergy = False
-    nuts_allergy = False
-    honey_allergy = False
-    cereal_allergy = False
-    meat_allergy = False
-    fish_allergy = False
 
     form = OrderForm(request.POST or None)
     promo_form = PromoForm(request.POST or None)
